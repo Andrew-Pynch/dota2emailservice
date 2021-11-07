@@ -1,11 +1,15 @@
 import argparse
 
+import requests
 from util.util import *
 
 
 class UserStats(object):
-    def __init__(self, user_id):
+    def __init__(self, user_id, api_key):
         self.user_id = user_id
+        self.api_token = api_key
+        self.headers = {"Authorization": "Bearer {access_token}"}
+
         self.current_mmr = self.get_current_mmr()
         self.mmr_history = self.get_mmr_history()
         self.mmr_diff = self.get_mmr_diff()
@@ -22,7 +26,17 @@ class UserStats(object):
         """
 
     def get_current_mmr(self):
-        return 480
+        response = requests.get(
+            f"https://api.opendota.com/api/players/{self.user_id}", headers=self.headers
+        )
+        if response.status_code == 200:
+            result = response.json()
+            try:
+                return result["mmr_estimate"]["estimate"]
+            except KeyError:
+                return "No MMR Estimate Found"
+        else:
+            return "An error occurred when trying to pull an MMR estimate for this user"
 
     def get_mmr_history(self):
         return [

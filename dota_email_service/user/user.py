@@ -12,7 +12,7 @@ class User(object):
         self.last_name = info["last_name"]
         self.email = info["email"]
         self.user_id = info["user_id"]
-        self.stats: UserStats = UserStats(info["user_id"])
+        self.stats: UserStats = None
 
     def __call__(self):
         print(self)
@@ -29,3 +29,6 @@ class User(object):
 
     def set_api_key(self, api_key):
         self.api_key = api_key
+
+    def set_stats(self, api_key):
+        self.stats = UserStats(self.user_id, api_key)

@@ -44,8 +44,8 @@ def get_email_template_as_string():
 
 
 def get_email_template_with_data(user: User, email_template):
-    new_email_template = email_template.replace("{{first_name}}", user.first_name)
-    new_email_template = new_email_template.replace("{first_name}", user.first_name)
+    new_email_template = email_template.replace("{first_name}", user.first_name)
+    # new_email_template = new_email_template.replace("{first_name}", user.first_name)
     return new_email_template
 
 
@@ -56,7 +56,7 @@ def get_subject_dates():
 
 
 def get_email_message(user: User, email_config: EmailConfig):
-    html_template = get_email_template_as_string()
+    html_template = get_email_template_with_data(user, get_email_template_as_string())
 
     message = MIMEMultipart("alternative")
     message["Subject"] = f"Dota2 Stats Summary {get_subject_dates()}"
